@@ -55,30 +55,30 @@ public class PlayFabMnaguer : MonoBehaviour
     [ContextMenu("rejistroUsuario")] //boton textual en el inspector
     public async void RegisterUserInPlayFab()
     {
-        //Debug.Log("Usuario registrado");
         try
         {
-            var registerTask = RegisterUserInPlayFabTask();
+            // Esperar a que el registro termine correctamente
+            var result = await RegisterUserInPlayFabTask();
+
+            Debug.Log("Usuario registrado correctamente");
+
+            // SOLO después de un registro exitoso cerramos la UI
             FindAnyObjectByType<EstadsUIInicial>().closeUIEstads();
             FindAnyObjectByType<SessionManager>().ClosePanelIniciarSesion();
 
+            // El usuario realmente está logueado
             InputManager.Instance.login = true;
-
-            await registerTask;
-
-            //registerTask.Result.Username  variable que guarda todo lo que hay en resultado
-
-            //textAlert.text = " se inicio sesion correctamednte";
-
-
-            //await RegisterUserInPlayFabTask();// espera que se realice la conexion a internet
         }
         catch (Exception error)
         {
+            // El registro falló.
+            // NO cerramos ningún panel.
+            Debug.LogError("Error al registrar usuario: " + error.Message);
+
             StartCoroutine(ShowAlert(GetFriendlyErrorMessage(error)));
         }
 
-        
+
     }
     public async Task <RegisterPlayFabUserResult> RegisterUserInPlayFabTask()
     {
