@@ -17,10 +17,13 @@ public class MovementController : NetworkBehaviour
     public Vector2 vector;
     public Vector3 kinematicVel;
 
+
+    private CaptureZone captureZone;
     public override void Spawned()
     {
         inputManager = InputManager.Instance;
         simpleKCC = GetComponent<SimpleKCC>();
+        captureZone = FindAnyObjectByType<CaptureZone>();
 
         //simpleKCC.SetGravity(-9.8f);
     }
@@ -29,11 +32,12 @@ public class MovementController : NetworkBehaviour
     public override void FixedUpdateNetwork()
     {
 
-        if (GetInput(out input ) && HasStateAuthority)
+        if (captureZone != null && captureZone.IsGameFinished)
+            return;
+
+        if (GetInput(out input) && HasStateAuthority)
         {
             Movement();
-            vector = input.playerPosition;
-
         }
 
 

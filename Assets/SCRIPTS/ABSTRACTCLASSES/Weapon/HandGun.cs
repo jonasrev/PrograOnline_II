@@ -26,7 +26,9 @@ public class HandGun : Weapons
             Debug.Log($"Disparando a {hit.collider.name}");
             if(hit.collider.TryGetComponent(out Vida vida))
             {
-                vida.RPC_TakeDamage(bulletDamage, info.Source);
+                NetworkObject shooter = GetComponentInParent<NetworkObject>();
+
+                vida.RPC_TakeDamage(bulletDamage, shooter);
             }
 
             if (sparks != null)

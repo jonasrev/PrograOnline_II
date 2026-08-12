@@ -67,17 +67,23 @@ public class ProgressBars : MonoBehaviour
             return;
         }
 
-        float bluePer = (captureZone.TeamBlueTime / captureZone.winTime);
-        float redPer = (captureZone.TeamRedTime / captureZone.winTime);
-        bluePer = Mathf.Clamp01(bluePer);
-        redPer = Mathf.Clamp01(redPer);
+        // Esperar a que CaptureZone haya sido Spawned
+        if (captureZone == null)
+            return;
+
+        if (captureZone.Object == null)
+            return;
+
+        if (!captureZone.Object.IsValid)
+            return;
+
+        float bluePer = Mathf.Clamp01(captureZone.TeamBlueTime / captureZone.winTime);
+        float redPer = Mathf.Clamp01(captureZone.TeamRedTime / captureZone.winTime);
 
         if (tHandler.team == Team.Blue)
         {
-
             localProgressBar.value = bluePer;
             otherProgressBar.value = redPer;
-
         }
         else
         {

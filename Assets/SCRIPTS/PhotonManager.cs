@@ -146,6 +146,7 @@ public class PhotonManager : MonoBehaviour, INetworkRunnerCallbacks
         {
             var playerObject = runner.Spawn(playerPrefab, Vector3.zero, Quaternion.identity, player);
             //Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
             runner.SetPlayerObject(player, playerObject);
 
             players.Add(player, playerObject);

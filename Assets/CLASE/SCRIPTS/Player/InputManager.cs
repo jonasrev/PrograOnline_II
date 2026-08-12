@@ -13,19 +13,23 @@ public class InputManager : MonoBehaviour
     
     private PlayerControls playerControls;
 
+    public bool login;
+
     private void Awake()
     {
-        if(_instance != null && _instance != this)
+        if (Instance != null && Instance != this)
         {
-            Debug.Log("Instance already exists, destroying object!");
-            Destroy(this.gameObject);
+            Destroy(gameObject);
+            return;
         }
-        else
-        {
-            _instance = this;
-            Debug.Log("Instance created");
-        }
+
+        Instance = this;
+
+        DontDestroyOnLoad(gameObject);
+
         playerControls = new PlayerControls();
+
+        Debug.Log($"InputManager creado: {GetInstanceID()}");
     }
 
     private void OnEnable()

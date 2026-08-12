@@ -43,6 +43,10 @@ public class CameraController : NetworkBehaviour
 
     private SimpleKCC simpleKCC;
 
+    private bool cameraMovementEnabled = true;
+
+    public static CameraController LocalCamera { get; private set; }
+
     private void Awake()
     {
         startPos = transform.localPosition;
@@ -71,17 +75,21 @@ public class CameraController : NetworkBehaviour
         {
             GetComponent<Camera>().enabled = false;
             GetComponent<AudioListener>().enabled = false;
+            return;
         }
+
+        // Este es el CameraController del jugador local
+        LocalCamera = this;
     }
 
     public override void FixedUpdateNetwork()
     {
         if (GetInput(out input))
         {
-            RotateCamera();
-            //if (!moveHead) return;
-            //BlobMove();
-            //ResetPosition();
+            if (cameraMovementEnabled)
+            {
+                RotateCamera();
+            }
         }
     }
 
@@ -168,6 +176,24 @@ public class CameraController : NetworkBehaviour
         pos.y = Mathf.Sin(Time.time * runningFrequency) * runningAmplitude * walkingSpeed;
         pos.x = Mathf.Cos(Time.time * runningFrequency / 2) * runningAmplitude * 2 * walkingSpeed;
         return pos;
+    }
+
+    public void StopCameraMovement()
+    {
+        if (!HasInputAuthority)
+            return;
+
+        cameraMovementEnabled = false;
+        smoothVelocity = Vector2.zero;
+    }
+
+    public void ResumeCameraMovement()
+    {
+        if (!HasInputAuthority)
+            return;
+
+        cameraMovementEnabled = true;
+        smoothVelocity = Vector2.zero;
     }
 
 }

@@ -8,10 +8,12 @@ public enum Team { Red, Blue }
 public class TeamHandler : NetworkBehaviour
 {
     [Networked] public Team team { get; set; }
-    [Networked] public float timeInZone {  get; set; }
+    [Networked] public float timeInZone { get; set; }
 
     private SpawnPointManager spawnPointManager;
     private SimpleKCC simpleKCC;
+
+
 
     public override void Spawned()
     {
@@ -42,5 +44,15 @@ public class TeamHandler : NetworkBehaviour
         int blue = players.Count(p => p.team == Team.Blue);
 
         return red <= blue ? Team.Red : Team.Blue;
+    }
+
+    public void OnGameFinished(Team winningTeam)
+    {
+        if (team == winningTeam)
+        {
+            GetComponent<Estadisticas>().VictoriasEnPartida++;
+            // Mostrar UI de victoria
+        }
+        
     }
 }

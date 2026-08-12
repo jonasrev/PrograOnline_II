@@ -50,8 +50,9 @@ public class Vida : NetworkBehaviour
 
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    public void RPC_TakeDamage(byte damage, PlayerRef shooter)
+    public void RPC_TakeDamage(byte damage, NetworkObject shooter)
     {
+        Debug.Log("Shooter recibido: " + shooter);
         _currentHealth -= damage;
 
         HealDelay = TickTimer.CreateFromSeconds(Runner, 2);
@@ -62,6 +63,14 @@ public class Vida : NetworkBehaviour
         if (_currentHealth <= 0 || _currentHealth > maxhealth)
         {
             //Invoke del Metodo MoveToSpawn
+            //aqui actico el contador y busco al asesion con la referencia recibida
+            Estadisticas stats = shooter.GetComponent<Estadisticas>();
+
+            if (stats != null)
+            {
+                stats.killsEnPartida++;
+            }
+
             OnDeath?.Invoke();
             _currentHealth = maxhealth;
             

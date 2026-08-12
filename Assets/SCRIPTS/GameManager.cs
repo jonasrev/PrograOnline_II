@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameObject[] dontDestroy;
 
+
     private void Awake()
     {
         foreach (GameObject go in dontDestroy)

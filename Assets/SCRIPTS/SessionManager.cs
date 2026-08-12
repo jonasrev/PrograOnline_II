@@ -26,6 +26,9 @@ public class SessionManager : MonoBehaviour
     [Header("Panel Personalizar Partida")]
     public GameObject PersonalizarParrtidaPanel;
 
+    [Header("Panel iniciar sesion")]
+    public GameObject iniciarSesionPanel;
+
     [Header("Scroll View")]
     public Transform contentParent;
     public GameObject sessionItemPrefab;
@@ -39,6 +42,11 @@ public class SessionManager : MonoBehaviour
     private void Awake()
     {
         PhotonManager.Instance.onSessionListUpdated += OnSessionListUpdated;
+    }
+
+    private void Start()
+    {
+        OpenPanelIniciarSesion();
     }
 
     #region Photon Callbacks
@@ -111,11 +119,19 @@ public class SessionManager : MonoBehaviour
     public void OpenPanelEncontrarPartida()
     {
         sessionsPanel.SetActive(true);
+
+        GameObject uiStats = FindAnyObjectByType<EstadsUIInicial>().gameObject;
+
+        uiStats.gameObject.SetActive(false);
     }
 
     public void ClosePanelEncontrarPartida()
     {
         sessionsPanel.SetActive(false);
+
+        EstadsUIInicial uiStats = FindAnyObjectByType<EstadsUIInicial>(FindObjectsInactive.Include);
+
+        uiStats.gameObject.SetActive(true);
     }
 
     /// <summary>
@@ -144,6 +160,21 @@ public class SessionManager : MonoBehaviour
     {
         PersonalizarParrtidaPanel.SetActive(false);
     }
+
+    public void OpenPanelIniciarSesion()
+    {
+        if (InputManager.Instance.login == false)
+        {
+            iniciarSesionPanel.SetActive(true);
+        }
+
+        
+    }
+
+    public void ClosePanelIniciarSesion()
+    {
+        iniciarSesionPanel.SetActive(false);
+    }
     #endregion
 
 
@@ -153,6 +184,10 @@ public class SessionManager : MonoBehaviour
 
 
     // hacer funcionar los botones panel buscarPartida, animooo tu puedes bro
+
+    //Puntos Anotados: por el tiempo que este en las zona de captura ira sumando puntos
+    //Kills: Numero de asesinatos que a realizados
+    //Victorias: Total de victorias obtenidas
 
 
 }
